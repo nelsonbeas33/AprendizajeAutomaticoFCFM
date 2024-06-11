@@ -20,7 +20,7 @@ Se pretende analizar datos de tumores en diferentes partes del cuerpo de un grup
 
 \section{Descripción de los datos}
 
-Los datos con los que se trabajaran constan de 9 dimensiones principales y 22 sub dimensiones, por lo que él análisis se centrará principalmente en las siguientes 9 características, una de las transformaciones más relevantes que se le realizaran a los datos es que los valores categóricos binarios de la columna "cal" serán cambiados de (M, B) a (1, 0).
+Los datos con los que se trabajaran constan de 9 dimensiones principales y 22 sub dimensiones, por lo que él análisis se centrará principalmente en las siguientes 9 características, una de las transformaciones más relevantes que se le realizaran a los datos es que los valores categóricos binarios de la columna "cal" serán cambiados de (M, B) a (1, 0), todos los datos son idealmente números reales.
 
 \begin{itemize}
     \item cal
