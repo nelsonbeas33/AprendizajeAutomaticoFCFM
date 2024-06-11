@@ -1,0 +1,175 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{titling}
+\usepackage[spanish]{babel}
+\usepackage[numbers,sort]{natbib}
+
+\title{Tarea 5. Aprendizaje no supervisado}
+\author{
+Universidad Autonoma de Nuevo León \\
+Beas Ham, Nelson Alfonso}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introducción}
+
+Se pretende analizar datos de tumores en diferentes partes del cuerpo de un grupo de pacientes, para los cuales se pretende crear una clasificación en dos grupos no supervisada, los datos se conforman por registros unicamente númericos para distintos atributos relevantes, como lo es el radio del rumor, un indice de textura, un perimetro, grado de compactación, entre otros.
+
+\section{Descripción de los datos}
+
+Los datos con los que se trabajaran constan de 9 dimensiones principales y 22 sub dimensiones, por lo que él análisis se centrará principalmente en las siguientes 9 características, una de las transformaciones más relevantes que se le realizaran a los datos es que los valores categóricos binarios de la columna "cal" serán cambiados de (M, B) a (1, 0).
+
+\begin{itemize}
+    \item cal
+    \item radius\_mean
+    \item texture\_mean
+    \item perimeter\_mean
+    \item area\_mean
+    \item smoothness\_mean
+    \item compactness\_mean
+    \item concavity\_mean
+    \item concave points\_mean
+\end{itemize}
+
+\subsection{Origen de los datos}
+
+Los datos fueron obtenidos de un registro público de conjuntos de datos, los cuales provienen de estudios de múltiples hospitales, a continuación se encuentra el enlace al repositorio.
+
+https://www.kaggle.com/datasets/erdemtaha/cancer-data/data
+
+\subsection{Estadística descriptiva básica}
+
+
+A continuación podemos observar las características estadísticas principales de nuestro conjunto de datos, el cual está formado por 569 registros, es importante tomar en cuenta que los conjuntos no están perfectamente balanceados.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\linewidth]{img/tarea5_img1.JPG}
+  \caption{Resumen estadístico de los datos}
+  \label{fig:nombre}
+\end{figure}
+
+\subsection{Preprocesamiento}
+
+La principal transformación que se aplicará a los datos será modificar el dominio de la variable "diagnosis" de la siguiente manera: M se tomará como 1 y B como 0.
+
+Ademas, se recortará del conjunto original las sub Categorias, por lo que nos quedaremos con las 9 listadas en el apartado 2.
+
+\section{Antecedentes}
+
+
+
+1. Década de 1980 y 1990:
+   - Durante este período, se comenzaron a explorar las primeras aplicaciones de la inteligencia artificial en el campo del cáncer.
+   - Se utilizaron técnicas de redes neuronales artificiales y sistemas expertos para el diagnóstico y pronóstico del cáncer.
+
+2. Década de 2000:
+   - Se vio un aumento significativo en la aplicación de algoritmos de aprendizaje automático, como máquinas de vectores de soporte (SVM), redes neuronales convolucionales (CNN) y árboles de decisión, para tareas de diagnóstico y detección temprana del cáncer.
+   - Se desarrollaron sistemas de apoyo a la toma de decisiones basados en inteligencia artificial para ayudar a los médicos en la interpretación de imágenes médicas, como mamografías y resonancias magnéticas, para la detección de cáncer de mama, cáncer de próstata, etc.
+   - Se comenzaron a utilizar algoritmos de minería de datos para analizar grandes conjuntos de datos clínicos y genómicos en busca de patrones y biomarcadores que puedan predecir la predisposición al cáncer, la progresión de la enfermedad y la respuesta al tratamiento.
+
+3. Década de 2010:
+   - La integración de la inteligencia artificial y el análisis de big data condujo a avances significativos en la medicina de precisión y la oncología personalizada.
+   - Se desarrollaron algoritmos de aprendizaje profundo (deep learning) para la interpretación automatizada de imágenes médicas, como tomografías computarizadas (TC), resonancias magnéticas (RM) y biopsias digitales, mejorando la precisión en el diagnóstico y la detección de cáncer.
+   - Se utilizaron técnicas de aprendizaje automático para identificar biomarcadores genómicos y moleculares que pueden ayudar en la selección de tratamientos específicos y predecir la respuesta del paciente a la terapia.
+
+4. Década de 2020 en adelante:
+   - Se espera que la inteligencia artificial continúe desempeñando un papel fundamental en el avance de la investigación y el tratamiento del cáncer.
+   - Se están explorando nuevas aplicaciones de la inteligencia artificial, como la medicina de sistemas, que integra datos clínicos, genómicos, proteómicos y de imágenes para comprender mejor la biología del cáncer y desarrollar terapias más efectivas y personalizadas.
+   - Se espera que la inteligencia artificial siga evolucionando para mejorar la precisión en el diagnóstico temprano, la predicción del riesgo de recurrencia, la identificación de nuevas dianas terapéuticas y la optimización de los regímenes de tratamiento del cáncer.
+
+
+
+\section{Metodología}
+
+Para este análisis, el atributo "Diagnosis" no le será proporcionado al algoritmo, haciendo uso de la librería pandas y sklearn del lenguaje de programación python a continuación describiremos las bases del algoritmo candidato para la clasificación.
+
+\section{Descripción del algoritmo K-Means}
+
+El algoritmo K-Means es un método de agrupamiento (clustering) que divide un conjunto de datos en $K$ grupos (clusters) basados en la similitud de las características de los datos. Funciona de la siguiente manera:
+
+\begin{enumerate}
+    \item \textbf{Inicialización:} Selecciona aleatoriamente $K$ puntos del conjunto de datos como los centroides iniciales de los clusters.
+    \item \textbf{Asignación de puntos:} Para cada punto en el conjunto de datos, calcula la distancia entre el punto y todos los centroides. Asigna el punto al cluster cuyo centroide está más cercano.
+    \item \textbf{Actualización de centroides:} Recalcula los centroides de los clusters como el promedio de todos los puntos asignados a ese cluster.
+    \item \textbf{Repetición:} Repite los pasos 2 y 3 hasta que no haya cambios significativos en la asignación de puntos a los clusters o se alcance un número máximo de iteraciones.
+\end{enumerate}
+
+\section{Fundamento matemático}
+
+El algoritmo K-Means se basa en minimizar la función objetivo conocida como la suma de los cuadrados de las distancias intra-cluster. Esta función se define como:
+
+\[
+\sum_{i=1}^{K} \sum_{x \in C_i} \|x - \mu_i\|^2
+\]
+
+donde:
+
+\begin{itemize}
+    \item $K$ es el número de clusters.
+    \item $C_i$ es el conjunto de puntos asignados al cluster $i$.
+    \item $\mu_i$ es el centroide del cluster $i$.
+    \item $\|x - \mu_i\|$ es la distancia euclidiana entre el punto $x$ y el centroide $\mu_i$.
+\end{itemize}
+
+El objetivo del algoritmo es encontrar la asignación de clusters que minimice esta función. Esto se logra mediante la actualización iterativa de los centroides y la reasignación de puntos a clusters, hasta que se alcanza una convergencia o se alcanza un número máximo de iteraciones.
+
+El algoritmo K-Means es conocido por su eficiencia y simplicidad, pero su rendimiento puede verse afectado por la sensibilidad a la inicialización de los centroides y su dependencia de la elección del número de clusters $K$.
+
+
+\section{Resultados}
+
+Se generó un modelo de Kmeans con un número de clústers igual a 2, además de un estado inicial igual a 42, con esto logramos que solo 92 de 569 datos no tuvieran una predicción correcta de su etiqueta, con un porcentaje de aciertos de un 83.83\%, 
+Podemos observar como se comporta la agrupación en función de diferentes campos en los adjuntos de la última página.
+
+\section{Discusión}
+La maldición de la dimensionalidad hace que el espacio de búsqueda se vuelva más disperso a medida que aumenta el número de dimensiones, dificultando la identificación de agrupaciones coherentes. La interpretación de los resultados puede ser difícil, ya que los clusters pueden estar dispersos en múltiples dimensiones, lo que dificulta su comprensión. Las características irrelevantes o redundantes pueden afectar negativamente el rendimiento de los algoritmos de agrupación, introduciendo ruido o aumentando la complejidad del modelo. El costo computacional aumenta con el número de dimensiones, especialmente en algoritmos que dependen de cálculos de distancia o densidad.
+
+A pesar de esto se pueden conseguir resultados excelentes bajo la experiencia de las transformaciones y la reducción de dimensiones, hoy en día es muy común encontrarnos con enfoques mixtos de transformaciones y algoritmos, además, existe la posibilidad de utilizar grupos diferentes de agrupación en competición.
+
+
+
+\bibliographystyle{unsrtnat}
+\bibliography{biblio}
+
+- Li, W., Cao, Y., Xu, J., Wang, M., \& Hu, W. (2020). Deep learning-based detection and segmentation of organs at risk in nasopharyngeal carcinoma computed tomography images for radiotherapy planning. Radiation Oncology, 15(1), 1-10.
+
+- Esteva, A., Kuprel, B., Novoa, R. A., Ko, J., Swetter, S. M., Blau, H. M., \& Thrun, S. (2017). Dermatologist-level classification of skin cancer with deep neural networks. Nature, 542(7639), 115-118.
+
+- Wang, S., Zhou, M., Liu, Z., Liu, Z., Guo, H., \& Ai, J. (2018). A multi-instance multi-label learning algorithm based on neural networks for protein subnuclear localization prediction. Bioinformatics, 34(10), 1704-1711.
+
+
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=1\linewidth]{img/img4.png}
+  \caption{Representación gráfica de los closters generados en función de concave points\_mean y area\_mean}
+  \label{fig:closter}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=1\linewidth]{img/img5.png}
+  \caption{Representación gráfica de la diagnosis real en función de concave points\_mean y area\_mean}
+  \label{fig:closter}
+\end{figure}
+
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=1\linewidth]{img/img2.png}
+  \caption{Representación gráfica de los closters generados en función de radius mean y texture mean}
+  \label{fig:closter}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=1\linewidth]{img/img3.png}
+  \caption{Representación gráfica de los closters generados en función de compactness mean y smoothness mean}
+  \label{fig:closter}
+\end{figure}
+
+\end{document}
