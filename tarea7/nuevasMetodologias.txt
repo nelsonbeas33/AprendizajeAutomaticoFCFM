@@ -1,0 +1,179 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{titling}
+\usepackage[spanish]{babel}
+\usepackage[numbers,sort]{natbib}
+
+\title{Tarea 7. clasificación}
+\author{
+Universidad Autonoma de Nuevo León \\
+Beas Ham, Nelson Alfonso}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introducción}
+
+Durante esta investigación analizaremos un conjunto de datos que representan características físicas de tumores, de los cuales conoces de antemano el diagnóstico médico, representado como una clasificación binaria de tumores benignos y malignos, se pretende realizar el entrenamiento de un modelo que realice una predicción de la categoría del tumor basada en un conjunto dado de datos de entrada que serán seleccionados por un algoritmo de selección de características, se tendrá en competición un conjunto de tres algoritmos los cuales simultáneamente generarán un resultado, asignado así al dato la etiqueta más votada.
+
+\section{Descripción de los datos}
+
+Los datos con los que se trabajaran constan de 9 dimensiones principales y 22 sub dimensiones, todos los datos menos el diagnóstico serán representados por números reales, en general, los datos representan características físicas como lo son el radio, la textura, el área y la suavidad.
+
+
+
+\subsection{Origen de los datos}
+
+Los datos fueron obtenidos de un registro público de conjuntos de datos, los cuales provienen de estudios de múltiples hospitales, a continuación se encuentra el enlace al repositorio.
+
+https://www.kaggle.com/datasets/erdemtaha/cancer-data/data
+
+\subsection{Preprocesamiento algoritmo supervisado}
+
+
+
+La principal transformación que se aplicará a los datos será modificar el dominio de la variable "diagnosis" de la siguiente manera: M se tomará como 1 y B como 0.
+
+Además, se realizará un análisis de las 16 variables más influyentes en el resultado de la etiqueta, con el propósito de formar una matriz de 4x4 que sería el input del modelo en forma de red neuronal convolucional.
+
+Los datos deben transformarse de un conjunto de 16 valores resultantes a una matriz de 4x4, por lo que se tomarán en conjuntos de 4 valores consecutivos los cuales formarán la fila número n.
+
+\subsection{Preprocesamiento algoritmo no supervisado}
+
+Se aplicará a los datos una moficicación dell dominio de la variable "diagnosis" de la siguiente manera: M se tomará como 1 y B como 0, ademas de su seperación del conjuto de datos de entranamiento.
+
+Además, se realizará un análisis de las 8 variables seleccionadas por un algorimto de PCA, las cuales serán las cantidatas para la generación de los closters.
+
+
+\subsection{Preprocesamiento del arbol}
+
+Se aplicará a los datos una moficicación dell dominio de la variable "diagnosis" de la siguiente manera: M se tomará como 1 y B como 0, ademas de su seperación del conjuto de datos de entranamiento.
+
+Además, se realizará un análisis de las 16 variables seleccionadas por un algorimto de PCA, las cuales serán las cantidatas para la generación de los nodos del arbol.
+
+\section{Antecedentes}
+
+\begin{itemize}
+\item 1. Década de 1980 y 1990:
+   - Durante este período, se comenzaron a explorar las primeras aplicaciones de la inteligencia artificial en el campo del cáncer.
+   - Se utilizaron técnicas de redes neuronales artificiales y sistemas expertos para el diagnóstico y pronóstico del cáncer.
+
+\item 2. Década de 2000:
+   - Se vio un aumento significativo en la aplicación de algoritmos de aprendizaje automático, como máquinas de vectores de soporte (SVM), redes neuronales convolucionales (CNN) y árboles de decisión, para tareas de diagnóstico y detección temprana del cáncer.
+   - Se desarrollaron sistemas de apoyo a la toma de decisiones basados en inteligencia artificial para ayudar a los médicos en la interpretación de imágenes médicas, como mamografías y resonancias magnéticas, para la detección de cáncer de mama, cáncer de próstata, etc.
+   - Se comenzaron a utilizar algoritmos de minería de datos para analizar grandes conjuntos de datos clínicos y genómicos en busca de patrones y biomarcadores que puedan predecir la predisposición al cáncer, la progresión de la enfermedad y la respuesta al tratamiento.
+
+\item 3. Década de 2010:
+   - La integración de la inteligencia artificial y el análisis de big data condujo a avances significativos en la medicina de precisión y la oncología personalizada.
+   - Se desarrollaron algoritmos de aprendizaje profundo (deep learning) para la interpretación automatizada de imágenes médicas, como tomografías computarizadas (TC), resonancias magnéticas (RM) y biopsias digitales, mejorando la precisión en el diagnóstico y la detección de cáncer.
+   - Se utilizaron técnicas de aprendizaje automático para identificar biomarcadores genómicos y moleculares que pueden ayudar en la selección de tratamientos específicos y predecir la respuesta del paciente a la terapia.
+
+\item 4. Hoy en día:
+   - Se espera que la inteligencia artificial continúe desempeñando un papel fundamental en el avance de la investigación y el tratamiento del cáncer.
+   - Se están explorando nuevas aplicaciones de la inteligencia artificial, como la medicina de sistemas, que integra datos clínicos, genómicos, proteómicos y de imágenes para comprender mejor la biología del cáncer y desarrollar terapias más efectivas y personalizadas.
+   - Se espera que la inteligencia artificial siga evolucionando para mejorar la precisión en el diagnóstico temprano, la predicción del riesgo de recurrencia, la identificación de nuevas dianas terapéuticas y la optimización de los regímenes de tratamiento del cáncer.
+
+\end{itemize}
+
+
+\section{Metodología}
+
+Para este proyecto, tomaremos un conjunto de tres algoritmos en competición para definir la etiqueta que se asignará al dato de entrada, haciendo uso de un algoritmo supervisado, en forma de red neuronal convolucional, un algoritmo no supervisado de agrupación k-means y un árbol de clasificación binaria.
+
+\subsection{Metodología algoritmo supervisado}
+
+Para este análisis, el atributo "Diagnosis" será tomado como la etiqueta objetivo del algoritmo, como primer paso, se tomarán las 30 variables independientes disponibles y se realizará un análisis de componentes principales, por medio del algoritmo selectKbest, tomando como parámetro k = 16, esto con el objetivo de así poder formar una matriz de 4x4 que será el valor de entrada para una red neuronal convolucional, cuya capa convolucional contará con filtros de 2x2.
+
+Como mencionamos en el apartado de preprocesamiento, realizaremos un aumento de dimenciones a los datos para formar una imagen de 4x4 con los 16 campos seleccionados por el algoritmo, esta imagen será la entrada a una red neuronal con las siguientes caracteristicas.
+
+\begin{itemize}
+
+ 
+\item De forma secuencial, la red esta formada por una capa convolucional de entrada 4x4x1, la cual cuenta con 4 núcleos de 2x2, activada mediante la función relu.
+
+\item Posteriormente, se encuentra una capa de maxpool con dimensión 2x2.
+
+\item Una capa de reducción de dimensiones 2D - 1D
+
+\item Una capa densa de 8 neuronas con activación relu.
+
+\item Una capa densa de 1 neurona con activación softmax.
+
+\item El algoritmo de optimización utilizado será ADAM con 8 épocas, la función de perdida será entropía cruzada binaria y la métrica será el nivel de acierto.
+
+\end{itemize}
+
+separaremos los datos en los conjuntos, 80\% de los datos iran al entrenamiento y 20\% a la evaluación.
+
+\subsection{Metodología algoritmo no supervisado}
+
+Para este análisis, el atributo "Diagnosis" no le será proporcionado al algoritmo, haciendo uso de la librería pandas y sklearn del lenguaje de programación python a continuación describiremos las bases del algoritmo candidato para la clasificación.
+
+El algoritmo K-Means es un método de agrupamiento (clustering) que divide un conjunto de datos en $K$ grupos (clusters) basados en la similitud de las características de los datos. Funciona de la siguiente manera:
+
+\begin{enumerate}
+    \item \textbf{Inicialización:} Selecciona aleatoriamente $K$ puntos del conjunto de datos como los centroides iniciales de los clusters.
+    \item \textbf{Asignación de puntos:} Para cada punto en el conjunto de datos, calcula la distancia entre el punto y todos los centroides. Asigna el punto al cluster cuyo centroide está más cercano.
+    \item \textbf{Actualización de centroides:} Recalcula los centroides de los clusters como el promedio de todos los puntos asignados a ese cluster.
+    \item \textbf{Repetición:} Repite los pasos 2 y 3 hasta que no haya cambios significativos en la asignación de puntos a los clusters o se alcance un número máximo de iteraciones.
+\end{enumerate}
+
+separaremos los datos en los conjuntos, 80\% de los datos iran al entrenamiento y 20\% a la evaluación.
+
+\subsection{Metodología algoritmo de arbol binario}
+
+Para este análisis, el atributo "Diagnosis" será tomado como la etiqueta objetivo del algoritmo, despues, como se mencionó en el apartado de pre-procesamiento, se tomanrán las 16 variables más importantes según el PCA, con las cuales se contruiran los nodos de la siguiente manera, a continuación describiremos la metodologia general para contruir un arbol de estas caracteristicas.
+
+\begin{enumerate}
+    \item \textbf{Seleccionar la Mejor División}:
+    \begin{itemize}
+        \item Evaluar todas las variables y umbrales posibles.
+        \item Calcular la pureza (índice de Gini, entropía, etc.) para cada división.
+        \item Seleccionar la variable y el umbral con la mejor pureza.
+    \end{itemize}
+
+    \item \textbf{Dividir el Conjunto de Datos}:
+    \begin{itemize}
+        \item Usar la mejor variable y umbral para dividir los datos en dos subconjuntos.
+        \item Crear nodos hijos para cada subconjunto.
+    \end{itemize}
+
+    \item \textbf{Asignar Etiquetas a las Hojas}:
+    \begin{itemize}
+        \item Si un nodo contiene datos de una sola clase o se ha alcanzado la profundidad máxima, asignar la etiqueta de la clase mayoritaria.
+        \item Si no, aplicar recursivamente los pasos 1 y 2 a los nodos hijos.
+    \end{itemize}
+
+    \item \textbf{Repetir Recursivamente Hasta Completar el Árbol}:
+    \begin{itemize}
+        \item Continuar dividiendo cada nodo hijo recursivamente.
+        \item Detener cuando todos los nodos sean hojas o se cumplan los criterios de detención.
+    \end{itemize}
+\end{enumerate}
+
+
+\section{Resultados}
+
+
+
+
+
+\section{Discusión}
+.
+
+
+
+\bibliographystyle{unsrtnat}
+\bibliography{biblio}
+
+- Li, W., Cao, Y., Xu, J., Wang, M., \& Hu, W. (2020). Deep learning-based detection and segmentation of organs at risk in nasopharyngeal carcinoma computed tomography images for radiotherapy planning. Radiation Oncology, 15(1), 1-10.
+
+- Esteva, A., Kuprel, B., Novoa, R. A., Ko, J., Swetter, S. M., Blau, H. M., \& Thrun, S. (2017). Dermatologist-level classification of skin cancer with deep neural networks. Nature, 542(7639), 115-118.
+
+- Wang, S., Zhou, M., Liu, Z., Liu, Z., Guo, H., \& Ai, J. (2018). A multi-instance multi-label learning algorithm based on neural networks for protein subnuclear localization prediction. Bioinformatics, 34(10), 1704-1711.
+
+
+
+\end{document}
